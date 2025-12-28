@@ -121,9 +121,10 @@ Inference-Graph-Data-Valuation/
 ## Citation
 
 ```bibtex
-@article{svgl2024,
+@article{chi2025shapley,
   title={Shapley-Guided Utility Learning for Effective Graph Inference Data Valuation},
-  author={...},
-  year={2024}
+  author={Chi, Hongliang and Wu, Qiong and Zhou, Zhengyi and Ma, Yao},
+  journal={arXiv preprint arXiv:2503.18195},
+  year={2025}
 }
 ```
