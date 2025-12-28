@@ -4,6 +4,7 @@
 
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
 [![PyTorch](https://img.shields.io/badge/PyTorch-1.10+-red.svg)](https://pytorch.org/)
+[![arXiv](https://img.shields.io/badge/arXiv-2503.18195-b31b1b.svg)](https://arxiv.org/abs/2503.18195)
 
 Official implementation of **"Shapley-Guided Utility Learning for Effective Graph Inference Data Valuation"**.
 
