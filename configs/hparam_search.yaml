@@ -1,0 +1,9 @@
+# Default grid for tuning the base GNN (SGC/GCN).
+#
+# Use with: `scripts/tune_gnn_hparams.py --search_space configs/hparam_search.yaml`
+defaults:
+  hidden_dims: [128, 256, 512]
+  num_epochs_list: [400, 600, 1000, 2000]
+  lr_list: [0.001, 0.01, 0.1]
+  weight_decay_list: [5e-4, 1e-4, 1e-3]
+

@@ -1,0 +1,36 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# OS
+.DS_Store
+
+# Logs
+*.log
+
+# Local datasets / caches / experiment outputs
+data/
+outputs/
+tmp/
+
+# Common training artifacts
+*.pt
+*.pth
+*.pkl
+*.npz
+
+# Virtual environments
+.venv/
+.env/

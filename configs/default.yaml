@@ -1,0 +1,33 @@
+# Default configuration for SVGL experiments
+
+# Model settings
+model:
+  name: sgc  # sgc or gcn
+  hidden_dim: 128
+  num_layers: 2  # for GCN
+  dropout: 0.5   # for GCN
+
+# Training settings
+training:
+  num_epochs: 400
+  learning_rate: 0.01
+  weight_decay: 0.0005
+  seed: 0
+
+# Data settings
+data:
+  setting: inductive  # inductive or transductive
+  use_pmlp: true      # whether to use PMLP (no edges in training)
+  data_seed: 0
+
+# Valuation settings
+valuation:
+  num_samples: 30     # number of permutation samples
+  k_folds: 5          # for LASSO cross-validation
+
+# Hyperparameter search space (for tuning)
+hyperparameter_search:
+  hidden_dims: [128, 256, 512]
+  num_epochs_list: [400, 600, 1000]
+  lr_list: [0.001, 0.01, 0.1]
+  weight_decay_list: [0.0005, 0.0001, 0.001]

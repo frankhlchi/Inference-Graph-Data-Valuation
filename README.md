@@ -1,57 +1,129 @@
-# Graph Inference Data Valuation Framework
+# Graph Inference Data Valuation Framework (SVGL)
+
 ![Inference_Data_Valuation_Poster_1](https://github.com/user-attachments/assets/4e598383-17fc-4754-846b-7e0a77039379)
-This repository contains code of Shapley-Guided Utility Learning for Effective Graph Inference Data Valuation.
 
-## Scripts Overview
+[![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
+[![PyTorch](https://img.shields.io/badge/PyTorch-1.10+-red.svg)](https://pytorch.org/)
 
-1. **preprocess.py**
-   - Preprocesses the graph dataset for GNN training and evaluation.
-   - Input: Raw graph data
-   - Output: Processed graph data ready for GNN consumption
+Official implementation of **"Shapley-Guided Utility Learning for Effective Graph Inference Data Valuation"**.
 
-2. **train_gnn.py**
-   - Trains the GNN model on the preprocessed data.
-   - Input: Processed graph data
-   - Output: Trained GNN model
+## Overview
 
-3. **valid_perm_sample.py**
-   - Generates validation permutation samples for model evaluation.
-   - Input: Trained GNN model, validation data
-   - Output: Validation permutation samples
+SVGL is a novel framework for quantifying the importance of test-time neighbors in Graph Neural Networks (GNNs). It addresses the challenge of evaluating data importance without test labels by:
 
-4. **test_perm_sample.py**
-   - Generates test permutation samples for final model evaluation.
-   - Input: Trained GNN model, test data
-   - Output: Test permutation samples
+1. **Transferable Feature Extraction**: Combining data-specific and model-specific features to approximate test accuracy
+2. **Shapley-guided Optimization**: Directly optimizing Shapley value prediction through feature Shapley decomposition
+3. **Structure-Aware Valuation**: Respecting graph connectivity constraints in value estimation
 
-5. **atc_confidence_estimation.py**
-   - Estimates confidence using the Adaptive Test Confidence (ATC) method.
-   - Input: Validation permutation samples
-   - Output: ATC confidence estimates
+## Installation
 
-6. **atc_ne_confidence_estimation.py**
-   - Estimates confidence using the ATC with Negative Entropy (ATC-NE) method.
-   - Input: Validation permutation samples
-   - Output: ATC-NE confidence estimates
+```bash
+# Clone the repository
+git clone https://github.com/frankhlchi/Inference-Graph-Data-Valuation.git
+cd Inference-Graph-Data-Valuation
 
+# Create conda environment (recommended)
+conda activate pydvl  # or create new: conda create -n svgl python=3.9
 
-7. **training_statistics.py**
-   - Computes and saves training set statistics for use in performance prediction.
-   - Input: Trained GNN model, training data
-   - Output: Training statistics
+# Install dependencies
+pip install -r requirements.txt
 
+# Install SVGL in development mode
+pip install -e .
+```
 
-8. **doc_performance_prediction.py**
-   - Predicts model performance using the Difference of Confidence (DOC) method.
-   - Input: Training statistics, validation permutation samples
-   - Output: DOC performance predictions
+## Quick Start
 
+### Run Demo (Recommended)
 
-9. **shapley_regression_pred_lasso.py**
-    - Performs Shapley regression prediction using LASSO regularization (our proposed method).
-    - Input: Shapley values, performance metrics
-    - Output: Regression model for performance prediction
+```bash
+# Quick demo on Cora dataset (takes ~2 minutes)
+python scripts/run_demo.py --dataset Cora --num_samples 5
 
-10. **shapley_estimation_drop_node.py**
-   - Estimates Shapley values for nodes by dropping them from the graph.
+# Full experiment with more samples
+python scripts/run_demo.py --dataset Cora --num_samples 30
+```
 
+### Large-Scale Reproduction
+
+```bash
+# Run multiple datasets / seeds (writes to outputs/reproduction/<timestamp>/)
+python scripts/run_parallel_experiments.py \
+  --datasets Cora Citeseer Pubmed CS Physics Computers Photo WikiCS \
+  --seeds 0 1 2 --num_samples 30 --device cuda:0 --jobs 1
+```
+
+### Optional: Base GNN Hyperparameter Tuning
+
+The original codebase includes a grid-search step for the base GNN. This repo supports the
+same workflow via `scripts/tune_gnn_hparams.py`, and `scripts/run_parallel_experiments.py`
+will automatically apply matching overrides from `configs/best_hparams.yaml` (empty by default).
+
+```bash
+# Grid-search base GNN hyperparameters and write to configs/best_hparams.yaml (time-consuming)
+python scripts/tune_gnn_hparams.py --datasets Cora Citeseer Pubmed --seed 0 --device cuda:0
+```
+
+To disable overrides and force the CLI flags/defaults, pass `--no_best_hparams`.
+
+### Python API
+
+```python
+from svgl import load_dataset, preprocess_data, create_model
+from svgl.valuation import sample_permutations, shapley_regression
+from svgl.utils import fix_seed, get_device
+
+# Setup
+fix_seed(42)
+device = get_device('auto')
+
+# Load and preprocess data
+dataset = load_dataset('Cora', root='./data/')
+data = dataset[0].to(device)
+split_data = preprocess_data('Cora', setting='inductive', use_pmlp=True)
+
+# Train GNN model
+model = create_model('sgc', data.num_features, dataset.num_classes)
+# ... training and valuation
+```
+
+## Project Structure
+
+```
+Inference-Graph-Data-Valuation/
+├── svgl/                       # Main package
+│   ├── data/                   # Data loading and preprocessing
+│   ├── models/                 # SGC, GCN, LASSO + tuning
+│   ├── valuation/              # Sampling, features, Shapley + SVGL regression
+│   └── utils/                  # Helper functions
+├── scripts/                    # Runnable entrypoints
+│   ├── run_demo.py
+│   ├── run_parallel_experiments.py
+│   ├── tune_gnn_hparams.py
+│   └── check_progress.sh
+├── configs/                    # Config files
+│   ├── default.yaml
+│   ├── hparam_search.yaml
+│   └── best_hparams.yaml
+└── outputs/                    # Results directory
+```
+
+## Supported Datasets
+
+| Category | Datasets |
+|----------|----------|
+| Planetoid | Cora, Citeseer, Pubmed |
+| Coauthor | CS, Physics |
+| Amazon | Computers, Photo |
+| Wikipedia | chameleon, squirrel, crocodile |
+| Heterophilous | Roman-empire, Amazon-ratings, Minesweeper, Tolokers, Questions |
+
+## Citation
+
+```bibtex
+@article{svgl2024,
+  title={Shapley-Guided Utility Learning for Effective Graph Inference Data Valuation},
+  author={...},
+  year={2024}
+}
+```
