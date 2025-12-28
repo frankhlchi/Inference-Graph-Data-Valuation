@@ -13,5 +13,18 @@
 # This file is intentionally shipped empty by default. Populate it via
 # `scripts/tune_gnn_hparams.py` (or manually) and `scripts/run_parallel_experiments.py`
 # will automatically apply matching overrides.
-{}
-
+Citeseer_inductive_pmlp_sgc:
+  hidden_dim: 256
+  lr: 0.1
+  num_epochs: 400
+  weight_decay: 0.0001
+Cora_inductive_pmlp_sgc:
+  hidden_dim: 256
+  lr: 0.1
+  num_epochs: 1000
+  weight_decay: 0.0001
+Pubmed_inductive_pmlp_sgc:
+  hidden_dim: 256
+  lr: 0.001
+  num_epochs: 400
+  weight_decay: 0.0005
