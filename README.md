@@ -114,9 +114,8 @@ Inference-Graph-Data-Valuation/
 |----------|----------|
 | Planetoid | Cora, Citeseer, Pubmed |
 | Coauthor | CS, Physics |
-| Amazon | Computers, Photo |
-| Wikipedia | chameleon, squirrel, crocodile |
-| Heterophilous | Roman-empire, Amazon-ratings, Minesweeper, Tolokers, Questions |
+| Heterophilous | Roman-empire, Amazon-ratings |
+| OGB (appendix) | ogbn-arxiv |
 
 ## Citation
 
