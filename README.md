@@ -54,6 +54,21 @@ python scripts/run_parallel_experiments.py \
   --seeds 0 1 2 --num_samples 30 --device cuda:0 --jobs 1
 ```
 
+### Node-Dropping Evaluation (AUC, Paper Metric)
+
+After `run_parallel_experiments.py` finishes (or for any completed subset), compute node-dropping AUC
+from the saved `test_samples/` and per-run `result.json`:
+
+```bash
+python scripts/eval_node_dropping.py \
+  --run_dir outputs/reproduction/<timestamp> \
+  --datasets Cora Citeseer Pubmed \
+  --seeds 0 1 2 --device cuda:0 --stride 1
+```
+
+This writes per-seed curves and an aggregated summary to:
+`outputs/reproduction/<timestamp>/node_dropping/SUMMARY.md`.
+
 ### Optional: Base GNN Hyperparameter Tuning
 
 The original codebase includes a grid-search step for the base GNN. This repo supports the
@@ -94,12 +109,14 @@ model = create_model('sgc', data.num_features, dataset.num_classes)
 Inference-Graph-Data-Valuation/
 ├── svgl/                       # Main package
 │   ├── data/                   # Data loading and preprocessing
+│   ├── evaluation/             # Node-dropping evaluation (AUC)
 │   ├── models/                 # SGC, GCN, LASSO + tuning
 │   ├── valuation/              # Sampling, features, Shapley + SVGL regression
 │   └── utils/                  # Helper functions
 ├── scripts/                    # Runnable entrypoints
 │   ├── run_demo.py
 │   ├── run_parallel_experiments.py
+│   ├── eval_node_dropping.py
 │   ├── tune_gnn_hparams.py
 │   └── check_progress.sh
 ├── configs/                    # Config files
