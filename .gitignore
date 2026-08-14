@@ -21,7 +21,7 @@ dist/
 *.log
 
 # Local datasets / caches / experiment outputs
-data/
+/data/
 outputs/
 tmp/
 

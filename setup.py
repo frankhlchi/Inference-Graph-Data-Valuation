@@ -27,7 +27,7 @@ setup(
     python_requires=">=3.8",
     install_requires=[
         "torch>=1.10.0",
-        "torch-geometric>=2.0.0",
+        "torch-geometric>=2.3.0",
         "numpy>=1.20.0",
         "scipy>=1.7.0",
         "scikit-learn>=1.0.0",
